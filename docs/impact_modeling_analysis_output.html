@@ -7517,22 +7517,13 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="%D8%AA%D8%AD%D9%84%D9%8A%D9%84-%D8%A7%D9%84%D8%A3%D8%AB%D8%B1-%D8%A7%D9%84%D9%85%D8%A4%D9%82%D8%AA-%D9%88%D8%AE%D9%88%D8%A7%D8%B1%D8%B2%D9%85%D9%8A%D8%A9-%D8%A7%D9%84%D8%AA%D9%86%D9%81%D9%8A%D8%B0-%D8%A7%D9%84%D9%85%D8%AB%D9%84%D9%89">تحليل الأثر المؤقت وخوارزمية التنفيذ المثلى<a class="anchor-link" href="#%D8%AA%D8%AD%D9%84%D9%8A%D9%84-%D8%A7%D9%84%D8%A3%D8%AB%D8%B1-%D8%A7%D9%84%D9%85%D8%A4%D9%82%D8%AA-%D9%88%D8%AE%D9%88%D8%A7%D8%B1%D8%B2%D9%85%D9%8A%D8%A9-%D8%A7%D9%84%D8%AA%D9%86%D9%81%D9%8A%D8%B0-%D8%A7%D9%84%D9%85%D8%AB%D9%84%D9%89">¶</a></h1><p>هذا الدفتر يهدف إلى:</p>
+<h1 id="Temporary-Impact-Analysis-and-Optimal-Execution-Algorithm">Temporary Impact Analysis and Optimal Execution Algorithm<a class="anchor-link" href="#Temporary-Impact-Analysis-and-Optimal-Execution-Algorithm">¶</a></h1><p>This notebook aims to:</p>
 <ul>
-<li>تحليل نموذج الأثر المؤقت للصفقات $g_t(x)$ باستخدام بيانات حقيقية لثلاثة رموز (CRWV, FROG, SOUN) مع مقارنة بين النماذج الخطية وغير الخطية.</li>
-<li>بناء إطار رياضي وخوارزمية تقريبية للتنفيذ الأمثل بحيث $\sum_i x_i = S$.</li>
+<li>Analyze the temporary market impact of trades</li>
+<li>Model the temporary impact function using a power-law</li>
+<li>Formulate and solve the optimal order allocation problem</li>
+<li>Visualize and summarize the results in a professional manner</li>
 </ul>
-<p>ستجد في الدفتر:</p>
-<ol>
-<li>استيراد وتجهيز البيانات.</li>
-<li>استكشاف وتحليل بصري للبيانات.</li>
-<li>ملاءمة النماذج الرياضية ومقارنة النتائج.</li>
-<li>شرح رياضي لخوارزمية التنفيذ.</li>
-<li>كود تطبيقي لخوارزمية التنفيذ المثلى.</li>
-</ol>
-<blockquote>
-<p><strong>ملاحظة:</strong> يجب توفر ملفات البيانات الأصلية في المسارات المحددة.</p>
-</blockquote>
 </div>
 </div>
 </div>
@@ -7541,10 +7532,13 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># استيراد المكتبات الأساسية للتحليل والرسم البياني</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Install matplotlib if not already installed</span>
+<span class="c1"># %pip install matplotlib</span>
+
+<span class="c1"># Import essential libraries for analysis and plotting</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -7552,7 +7546,7 @@ a.anchor-link {
 <span class="kn">from</span><span class="w"> </span><span class="nn">zipfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZipFile</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="c1"># إعداد الرسوم البيانية لتكون أكثر وضوحًا وجمالًا</span>
+<span class="c1"># Set up the plots to be clearer and more beautiful</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">'whitegrid'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'figure.figsize'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 </pre></div>
@@ -7560,53 +7554,137 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=78208a42">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=78208a42">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># تحميل البيانات الحقيقية من ملفات zip لكل رمز مع معالجة الأخطاء</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Load real data from zip files for each ticker with error handling</span>
+
 
 <span class="n">ticker_paths</span> <span class="o">=</span> <span class="p">{</span>
+
     <span class="s1">'CRWV'</span><span class="p">:</span> <span class="s1">'data/CRWV/CRWV.zip'</span><span class="p">,</span>
+
     <span class="s1">'FROG'</span><span class="p">:</span> <span class="s1">'data/FROG/FROG.zip'</span><span class="p">,</span>
+
     <span class="s1">'SOUN'</span><span class="p">:</span> <span class="s1">'data/SOUN/SOUN.zip'</span>
+
 <span class="p">}</span>
+
+
 
 <span class="n">ticker_dfs</span> <span class="o">=</span> <span class="p">{}</span>
 
+
+
 <span class="k">for</span> <span class="n">ticker</span><span class="p">,</span> <span class="n">zip_path</span> <span class="ow">in</span> <span class="n">ticker_paths</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="s1">--- معالجة بيانات </span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1"> ---'</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="s1">--- Processing data for </span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1"> ---'</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">zip_path</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'❌ الملف غير موجود: </span><span class="si">{</span><span class="n">zip_path</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'❌ File not found: </span><span class="si">{</span><span class="n">zip_path</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
         <span class="k">continue</span>
+
     <span class="k">try</span><span class="p">:</span>
+
         <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">zip_path</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_ref</span><span class="p">:</span>
+
             <span class="n">zip_ref</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="sa">f</span><span class="s1">'data/</span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1">/extracted'</span><span class="p">)</span>
+
             <span class="n">csv_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="sa">f</span><span class="s1">'data/</span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1">/extracted'</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".csv"</span><span class="p">)]</span>
+
             <span class="k">if</span> <span class="ow">not</span> <span class="n">csv_files</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'❌ لا يوجد ملف CSV داخل </span><span class="si">{</span><span class="n">zip_path</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'❌ No CSV file inside </span><span class="si">{</span><span class="n">zip_path</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
                 <span class="k">continue</span>
+
             <span class="k">try</span><span class="p">:</span>
+
                 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">f</span><span class="s1">'data/</span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1">/extracted/'</span> <span class="o">+</span> <span class="n">csv_files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'❌ خطأ في قراءة CSV: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'❌ Error reading CSV: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
                 <span class="k">continue</span>
+
             <span class="n">required_cols</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="s1">'price'</span><span class="p">,</span> <span class="s1">'volume'</span><span class="p">])</span>
+
             <span class="k">if</span> <span class="ow">not</span> <span class="n">required_cols</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'❌ ملف </span><span class="si">{</span><span class="n">csv_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> لا يحتوي الأعمدة المطلوبة: </span><span class="si">{</span><span class="n">required_cols</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'❌ File </span><span class="si">{</span><span class="n">csv_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> does not contain required columns: </span><span class="si">{</span><span class="n">required_cols</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
                 <span class="k">continue</span>
+
             <span class="n">ticker_dfs</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'✅ تم تحميل البيانات (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1">) صف'</span><span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'✅ Data loaded (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1">) rows'</span><span class="p">)</span>
+
             <span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'❌ خطأ أثناء معالجة </span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'❌ Error processing </span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
+
 
 <span class="k">if</span> <span class="ow">not</span> <span class="n">ticker_dfs</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'⚠️ لم يتم تحميل أي بيانات. تأكد من وجود الملفات بالمسارات الصحيحة وبالصيغة المطلوبة.'</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">'⚠️ No data loaded. Make sure files exist at the correct paths and in the required format.'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=fe3809c2">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Data exploration and visual analysis</span>
+
+
+<span class="k">for</span> <span class="n">ticker</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">ticker_dfs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="s1">--- Analysis for </span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1"> ---'</span><span class="p">)</span>
+
+    <span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s1">'price'</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">'volume'</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+
+        <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+        <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">'price'</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">'royalblue'</span><span class="p">)</span>
+
+        <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1"> Price'</span><span class="p">)</span>
+
+        <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'Time'</span><span class="p">)</span>
+
+        <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'Price'</span><span class="p">)</span>
+
+        <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">'volume'</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">'darkorange'</span><span class="p">)</span>
+
+        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1"> Trading Volume'</span><span class="p">)</span>
+
+        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'Time'</span><span class="p">)</span>
+
+        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'Volume'</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Visual Analysis for </span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -7618,55 +7696,17 @@ a.anchor-link {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
 <pre>
---- معالجة بيانات CRWV ---
-❌ خطأ أثناء معالجة CRWV: File is not a zip file
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[1]</span><span class="ansi-green-fg">, line 3</span>
+<span class="ansi-green-fg">      1</span> <span style="color: rgb(95,135,135)"># استكشاف وتحليل بصري للبيانات</span>
+<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">3</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> ticker, df <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span class="ansi-yellow-bg">ticker_dfs</span>.items():
+<span class="ansi-green-fg">      4</span>     <span style="color: rgb(0,135,0)">print</span>(<span class="ansi-yellow-fg">f</span><span class="ansi-yellow-fg">'</span><span class="ansi-bold" style="color: rgb(175,95,0)">\n</span><span class="ansi-yellow-fg">--- تحليل </span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>ticker<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span class="ansi-yellow-fg"> ---</span><span class="ansi-yellow-fg">'</span>)
+<span class="ansi-green-fg">      5</span>     display(df.describe().T)
 
---- معالجة بيانات FROG ---
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>❌ ملف FROG_2025-04-29 00:00:00+00:00.csv لا يحتوي الأعمدة المطلوبة: {'volume'}
-
---- معالجة بيانات SOUN ---
-❌ خطأ أثناء معالجة SOUN: File is not a zip file
-⚠️ لم يتم تحميل أي بيانات. تأكد من وجود الملفات بالمسارات الصحيحة وبالصيغة المطلوبة.
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=fe3809c2">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># استكشاف وتحليل بصري للبيانات</span>
-
-<span class="k">for</span> <span class="n">ticker</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">ticker_dfs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="s1">--- تحليل </span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1"> ---'</span><span class="p">)</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
-    <span class="k">if</span> <span class="s1">'price'</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">'volume'</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-        <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">'price'</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">'royalblue'</span><span class="p">)</span>
-        <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'سعر </span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-        <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'الزمن'</span><span class="p">)</span>
-        <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'السعر'</span><span class="p">)</span>
-        <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">'volume'</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">'darkorange'</span><span class="p">)</span>
-        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'حجم التداول </span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'الزمن'</span><span class="p">)</span>
-        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'الحجم'</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">'تحليل بياني لـ </span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
+<span class="ansi-red-fg">NameError</span>: name 'ticker_dfs' is not defined</pre>
 </div>
 </div>
 </div>
@@ -7678,18 +7718,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Modeling-the-Temporary-Impact-$g_t(x)$">Modeling the Temporary Impact $g_t(x)$<a class="anchor-link" href="#Modeling-the-Temporary-Impact-$g_t(x)$">¶</a></h2><p>The temporary market impact function $g_t(x)$ models the immediate price change caused by trading $x$ shares at time $t$. A common approach is to assume a linear relationship: $g_t(x) \approx \beta_t x$. However, this can be a gross oversimplification, as real market impact often exhibits nonlinearities due to liquidity, order book depth, and market microstructure effects.</p>
-<h3 id="Linear-Model">Linear Model<a class="anchor-link" href="#Linear-Model">¶</a></h3><ul>
-<li><strong>Form:</strong> $g_t(x) = \beta_t x$</li>
-<li><strong>Pros:</strong> Simple, interpretable, easy to estimate.</li>
-<li><strong>Cons:</strong> May not capture diminishing/increasing returns to scale, ignores nonlinear liquidity effects.</li>
-</ul>
-<h3 id="Nonlinear-Model">Nonlinear Model<a class="anchor-link" href="#Nonlinear-Model">¶</a></h3><ul>
-<li><strong>Form:</strong> $g_t(x) = \alpha_t x^p$ (with $p \neq 1$)</li>
-<li><strong>Pros:</strong> Can capture concave/convex impact, more flexible.</li>
-<li><strong>Cons:</strong> More complex to estimate, risk of overfitting with limited data.</li>
-</ul>
-<p>We will fit both models to the data and compare their fit.</p>
+<h2 id="Importing-Essential-Libraries-for-Analysis-and-Visualization">Importing Essential Libraries for Analysis and Visualization<a class="anchor-link" href="#Importing-Essential-Libraries-for-Analysis-and-Visualization">¶</a></h2><p>In this section, we import the main Python libraries used for data analysis and visualization.</p>
 </div>
 </div>
 </div>
@@ -7698,53 +7727,99 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># ملاءمة النماذج الخطية وغير الخطية للأثر المؤقت g_t(x)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">pip</span> install scipy
+
+
+<span class="c1"># Fit linear and nonlinear models for temporary impact g_t(x)</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">curve_fit</span>
 
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">linear_model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">beta</span><span class="p">):</span>
+
     <span class="k">return</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">x</span>
 
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">nonlinear_model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+
     <span class="k">return</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+
+
 
 <span class="n">fit_results</span> <span class="o">=</span> <span class="p">{}</span>
 
+
+
 <span class="k">for</span> <span class="n">ticker</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">ticker_dfs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
     <span class="k">if</span> <span class="s1">'price'</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">'volume'</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="s1">--- ملاءمة النماذج لـ </span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1"> ---'</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="s1">--- Model fitting for </span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1"> ---'</span><span class="p">)</span>
+
         <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
         <span class="n">df</span><span class="p">[</span><span class="s1">'impact'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'price'</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
         <span class="n">x</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'volume'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
         <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'impact'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-        <span class="c1"># ملاءمة النموذج الخطي</span>
+
+        <span class="c1"># Fit linear model</span>
+
         <span class="k">try</span><span class="p">:</span>
+
             <span class="n">popt_lin</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">linear_model</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'خطأ في النموذج الخطي: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Error in linear model: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
             <span class="k">continue</span>
-        <span class="c1"># ملاءمة النموذج غير الخطي</span>
+
+        <span class="c1"># Fit nonlinear model</span>
+
         <span class="k">try</span><span class="p">:</span>
+
             <span class="n">popt_nonlin</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">nonlinear_model</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span><span class="mi">2</span><span class="p">]))</span>
+
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'خطأ في النموذج غير الخطي: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Error in nonlinear model: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
             <span class="k">continue</span>
+
         <span class="n">fit_results</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'linear'</span><span class="p">:</span> <span class="n">popt_lin</span><span class="p">,</span> <span class="s1">'nonlinear'</span><span class="p">:</span> <span class="n">popt_nonlin</span><span class="p">}</span>
-        <span class="c1"># رسم النتائج</span>
+
+        <span class="c1"># Plot results</span>
+
         <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'البيانات'</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Data'</span><span class="p">)</span>
+
         <span class="n">x_fit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">100</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_fit</span><span class="p">,</span> <span class="n">linear_model</span><span class="p">(</span><span class="n">x_fit</span><span class="p">,</span> <span class="o">*</span><span class="n">popt_lin</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">'النموذج الخطي'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'royalblue'</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_fit</span><span class="p">,</span> <span class="n">nonlinear_model</span><span class="p">(</span><span class="n">x_fit</span><span class="p">,</span> <span class="o">*</span><span class="n">popt_nonlin</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">'النموذج غير الخطي'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'darkorange'</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'ملاءمة الأثر المؤقت لـ </span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'الحجم'</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'تغير السعر'</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_fit</span><span class="p">,</span> <span class="n">linear_model</span><span class="p">(</span><span class="n">x_fit</span><span class="p">,</span> <span class="o">*</span><span class="n">popt_lin</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Linear Model'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'royalblue'</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_fit</span><span class="p">,</span> <span class="n">nonlinear_model</span><span class="p">(</span><span class="n">x_fit</span><span class="p">,</span> <span class="o">*</span><span class="n">popt_nonlin</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Nonlinear Model'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'darkorange'</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Temporary Impact Fitting for </span><span class="si">{</span><span class="n">ticker</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'Volume'</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'Price Change'</span><span class="p">)</span>
+
         <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'معامل النموذج الخطي (beta): </span><span class="si">{</span><span class="n">popt_lin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">.4g</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'معاملات النموذج غير الخطي (alpha, p): </span><span class="si">{</span><span class="n">popt_nonlin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">.4g</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">popt_nonlin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.4g</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Linear model coefficient (beta): </span><span class="si">{</span><span class="n">popt_lin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">.4g</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Nonlinear model coefficients (alpha, p): </span><span class="si">{</span><span class="n">popt_nonlin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">.4g</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">popt_nonlin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.4g</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7757,15 +7832,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="%D9%85%D9%86%D8%A7%D9%82%D8%B4%D8%A9-%D9%88%D9%86%D8%AA%D8%A7%D8%A6%D8%AC-%D8%A7%D9%84%D9%86%D9%85%D8%A7%D8%B0%D8%AC">مناقشة ونتائج النماذج<a class="anchor-link" href="#%D9%85%D9%86%D8%A7%D9%82%D8%B4%D8%A9-%D9%88%D9%86%D8%AA%D8%A7%D8%A6%D8%AC-%D8%A7%D9%84%D9%86%D9%85%D8%A7%D8%B0%D8%AC">¶</a></h3><p>النموذج الخطي $g_t(x) = \beta_t x$ بسيط وسهل التفسير، لكنه غالبًا لا يعكس الواقع بدقة في الأسواق ذات السيولة المنخفضة أو عند تنفيذ أوامر كبيرة. النموذج غير الخطي $g_t(x) = \alpha_t x^p$ يوفر مرونة أكبر ويعكس سلوك السوق بشكل أفضل عند وجود لاخطية في التأثير.</p>
-<p><strong>استنتاج:</strong></p>
-<ul>
-<li>استخدم النموذج غير الخطي إذا أظهرت البيانات أن $p$ يختلف عن 1 بشكل واضح.</li>
-<li>في حال تشابه النتائج، يمكن الاكتفاء بالنموذج الخطي للبساطته.</li>
-</ul>
-<blockquote>
-<p><strong>توصية:</strong> راقب دائمًا جودة الملاءمة وفسر النتائج بناءً على خصائص السوق والبيانات المتوفرة.</p>
-</blockquote>
+<h2 id="Data-Loading-and-Preprocessing">Data Loading and Preprocessing<a class="anchor-link" href="#Data-Loading-and-Preprocessing">¶</a></h2><p>Here, we load the market data and perform necessary preprocessing steps to prepare it for analysis.</p>
 </div>
 </div>
 </div>
@@ -7776,34 +7843,16 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="%D8%A7%D9%84%D8%A5%D8%B7%D8%A7%D8%B1-%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A-%D9%88%D8%AE%D9%88%D8%A7%D8%B1%D8%B2%D9%85%D9%8A%D8%A9-%D8%A7%D9%84%D8%AA%D9%86%D9%81%D9%8A%D8%B0-%D8%A7%D9%84%D9%85%D8%AB%D9%84%D9%89">الإطار الرياضي وخوارزمية التنفيذ المثلى<a class="anchor-link" href="#%D8%A7%D9%84%D8%A5%D8%B7%D8%A7%D8%B1-%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A-%D9%88%D8%AE%D9%88%D8%A7%D8%B1%D8%B2%D9%85%D9%8A%D8%A9-%D8%A7%D9%84%D8%AA%D9%86%D9%81%D9%8A%D8%B0-%D8%A7%D9%84%D9%85%D8%AB%D9%84%D9%89">¶</a></h3><p><strong>المطلوب:</strong> تنفيذ كمية كلية $S$ من الأسهم على $N$ فترات بحيث $\sum x_i = S$ مع تقليل التكلفة الكلية التي تشمل الأثر المؤقت.</p>
-<p><strong>الدالة الهدف:</strong></p>
-<p>$$
-\min_{x_1,...,x_N} \sum_{i=1}^N [P_{t_i} x_i + g_i(x_i)]
-$$</p>
-<p><strong>القيود:</strong></p>
-<ul>
-<li>$\sum_{i=1}^N x_i = S$</li>
-<li>$x_i \geq 0$</li>
-</ul>
-<p><strong>خطوات الحل:</strong></p>
-<ol>
-<li>إذا كان $g_i(x)$ خطيًا، الحل تحليلي (Almgren-Chriss).</li>
-<li>إذا كان غير خطي، استخدم خوارزميات عددية مثل <code>scipy.optimize.minimize</code>.</li>
-<li>تحقق من تحقق القيود بعد الحل.</li>
-</ol>
-<blockquote>
-<p><strong>ملاحظة:</strong> يمكن تعديل الدالة الهدف أو القيود حسب متطلبات السوق أو المخاطر.</p>
-</blockquote>
+<h2 id="Temporary-Impact-Modeling-and-Visualization">Temporary Impact Modeling and Visualization<a class="anchor-link" href="#Temporary-Impact-Modeling-and-Visualization">¶</a></h2><p>We analyze the temporary market impact and visualize the results using the fitted power-law model.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=41531d17">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=41531d17">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Example: Optimal Execution with Nonlinear Impact</span>
@@ -7829,21 +7878,6 @@ $$</p>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Optimal x:'</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Total cost:'</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">fun</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Optimal x: [1000.00000076 1000.00000076 1000.00000076 1000.00000076 1000.00000076
- 1000.00000076 1000.00000076 1000.00000076  999.99999314 1000.00000076]
-Total cost: 1000025.1188643151
-</pre>
 </div>
 </div>
 </div>
