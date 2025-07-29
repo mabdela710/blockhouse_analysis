@@ -49,13 +49,37 @@
             font-size: 0.95em;
             text-align: center;
         }
+        .plot-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .plot-item {
+            text-align: center;
+            border: 1px solid #eee;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+        .plot-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .plot-item p {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Blockhouse Analysis Results</h1>
         <div class="desc">
-            <p><strong></strong>Welcome to the Blockhouse Market Impact & Optimal Allocation Project!</strong></p>
+            <p><strong>Welcome to the Blockhouse Market Impact & Optimal Allocation Project!</strong></p>
             <ul style="margin-top: 1em; margin-bottom: 1em;">
                 <li><strong>Goal:</strong> Minimize trading impact by modeling and optimizing order execution across multiple stocks and time periods.</li>
                 <li><strong>Data:</strong> Real and synthetic order book data for 3 stocks, 1-minute intervals.</li>
@@ -70,7 +94,24 @@
             </li>
             <li>
                 <strong>Generated Plots & Visualizations:</strong><br>
-                <em>Plots will appear here if present in the docs/ directory.</em>
+                <div class="plot-container">
+                    <div class="plot-item">
+                        <img src="output/CRWV_impact_analysis.png" alt="CRWV Impact Analysis">
+                        <p>CRWV Impact Analysis</p>
+                    </div>
+                    <div class="plot-item">
+                        <img src="output/FROG_impact_analysis.png" alt="FROG Impact Analysis">
+                        <p>FROG Impact Analysis</p>
+                    </div>
+                    <div class="plot-item">
+                        <img src="output/SOUN_impact_analysis.png" alt="SOUN Impact Analysis">
+                        <p>SOUN Impact Analysis</p>
+                    </div>
+                    <div class="plot-item">
+                        <img src="output/optimal_allocation_example.png" alt="Optimal Allocation Example">
+                        <p>Optimal Allocation Example</p>
+                    </div>
+                </div>
             </li>
         </ul>
 
@@ -78,12 +119,16 @@
             <h2 style="margin-top:0; color:#1565c0;">Supplementary Documents</h2>
             <ul class="results-list">
                 <li>
-                    <a href="Modeling_the_Temporary_Impact_Function_g_t(x) (1).pdf" target="_blank"><strong>Modeling the Temporary Impact Function g_t(x)</strong> (PDF)</a><br>
+                    <a href="Modeling_the_Temporary_Impact_Function_g_t_x.pdf" target="_blank"><strong>Modeling the Temporary Impact Function g_t(x)</strong> (PDF)</a><br>
                     <span style="color:#444; font-size:0.98em;">Detailed explanation of the impact function modeling, with data-driven insights and visualizations.</span>
                 </li>
                 <li>
-                    <a href="Mathematical_Framework_for_Optimal_Order_Allocation (1).pdf" target="_blank"><strong>Mathematical Framework for Optimal Order Allocation</strong> (PDF)</a><br>
+                    <a href="Mathematical_Framework_for_Optimal_Order_Allocation.pdf" target="_blank"><strong>Mathematical Framework for Optimal Order Allocation</strong> (PDF)</a><br>
                     <span style="color:#444; font-size:0.98em;">Mathematical formulation and solution approach for optimal execution across trading periods.</span>
+                </li>
+                <li>
+                    <a href="Modeling_Temporary_Impact_and_Optimal_Order_Allocation.pdf" target="_blank"><strong>Modeling Temporary Impact and Optimal Order Allocation (Presentation)</strong> (PDF)</a><br>
+                    <span style="color:#444; font-size:0.98em;">A concise overview of the project, key findings, and methodologies.</span>
                 </li>
             </ul>
         </div>
@@ -92,3 +137,5 @@
         </div>
     </div>
 </body>
+</html>
+
