@@ -53,8 +53,6 @@ This project analyzes temporary market impact and formulates an optimal order al
 - **Modeling Temporary Impact and Optimal Order Allocation (Presentation)**: `docs/Modeling_Temporary_Impact_and_Optimal_Order_Allocation.pdf`
 - **Generated Plots**: Located in the `output/` directory and linked in `docs/index.html`.
 
-## Contact
 
-For any questions or further discussion, please contact [Your Name/Email/LinkedIn].
 
 
